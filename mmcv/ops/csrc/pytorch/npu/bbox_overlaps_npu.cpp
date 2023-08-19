@@ -21,8 +21,8 @@ void bbox_overlaps_npu(const Tensor bboxes1, const Tensor bboxes2, Tensor ious,
     gtboxesFP32 = bboxes2;
   }
   if (bboxes2.scalar_type() != at::ScalarType::Float) {
-    bboxesFP32 = NPUNativeFunctions::npu_dtype_cast(bboxesFP32, at::kFloat);
-    gtboxesFP32 = NPUNativeFunctions::npu_dtype_cast(gtboxesFP32, at::kFloat);
+    bboxesFP32 = custom_ops::npu_dtype_cast(bboxesFP32, at::kFloat);
+    gtboxesFP32 = custom_ops::npu_dtype_cast(gtboxesFP32, at::kFloat);
   }
   c10::SmallVector<int64_t, SIZE> iousSize = {gtboxesFP32.size(0),
                                               bboxesFP32.size(0)};
@@ -42,7 +42,7 @@ void bbox_overlaps_npu(const Tensor bboxes1, const Tensor bboxes2, Tensor ious,
       .Attr("aligned", aligned)
       .Run();
   if (bboxes2.scalar_type() != at::ScalarType::Float) {
-    iousFP32 = NPUNativeFunctions::npu_dtype_cast(iousFP32, at::kHalf);
+    iousFP32 = custom_ops::npu_dtype_cast(iousFP32, at::kHalf);
   }
   iousFP32 = swap_flag ? iousFP32.transpose(0, 1) : iousFP32;
   ious.copy_(iousFP32);

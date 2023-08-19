@@ -35,7 +35,7 @@ Tensor nms_npu(Tensor boxes, Tensor scores, float iou_threshold, int offset) {
   auto outputsizeInt = outputsizeBool.to(at::ScalarType::Int);
   auto countLen = at::sum(outputsizeInt, at::ScalarType::Int);
   at::Tensor actual_output = output.slice(0, 0, countLen.item().toLong());
-  actual_output = at_npu::native::NPUNativeFunctions::npu_dtype_cast(
+  actual_output = at_npu::native::custom_ops::npu_dtype_cast(
       actual_output, at::kLong);
   return actual_output;
 }

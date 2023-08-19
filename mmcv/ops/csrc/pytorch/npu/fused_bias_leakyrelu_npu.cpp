@@ -25,7 +25,7 @@ Tensor fused_bias_leakyrelu_npu(const Tensor &input, const Tensor &bias,
       }
     }
     at::Tensor bias_tmp = at::reshape(bias, input_size_tmp);
-    at::Tensor bias_ = at_npu::native::NPUNativeFunctions::npu_broadcast(
+    at::Tensor bias_ = at_npu::native::custom_ops::npu_broadcast(
         bias_tmp, input.sizes());
     OpCommand cmd;
     cmd.Name("FusedBiasLeakyRelu")

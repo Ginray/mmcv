@@ -8,8 +8,8 @@ Tensor nms_rotated_npu(const Tensor dets, const Tensor scores,
   at::Tensor detsCast = dets;
   at::Tensor scoresCast = scores;
   if (originDtype != at::ScalarType::Float) {
-    detsCast = NPUNativeFunctions::npu_dtype_cast(dets, at::kFloat);
-    scoresCast = NPUNativeFunctions::npu_dtype_cast(scores, at::kFloat);
+    detsCast = custom_ops::npu_dtype_cast(dets, at::kFloat);
+    scoresCast = custom_ops::npu_dtype_cast(scores, at::kFloat);
   }
   c10::SmallVector<int64_t, SIZE> selectedIndexSize = {dets.size(0)};
   at::Tensor selectedBox = OpPreparation::ApplyTensor(dets);
@@ -27,6 +27,6 @@ Tensor nms_rotated_npu(const Tensor dets, const Tensor scores,
       .Output(selectedIndex)
       .Attr("iou_threshold", (float)iou_threshold)
       .Run();
-  selectedIndex = NPUNativeFunctions::npu_dtype_cast(selectedIndex, at::kLong);
+  selectedIndex = custom_ops::npu_dtype_cast(selectedIndex, at::kLong);
   return selectedIndex;
 }
