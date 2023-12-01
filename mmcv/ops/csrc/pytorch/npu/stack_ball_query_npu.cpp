@@ -11,16 +11,7 @@ void stack_ball_query_forward_npu(float max_radius, int nsample,
   int64_t nsample_i64 = nsample;
   at::Tensor xyz_transpose = xyz.transpose(0, 1);
 
-  OpCommand cmd;
-  cmd.Name("StackBallQuery")
-      .Input(xyz_transpose)
-      .Input(new_xyz)
-      .Input(xyz_batch_cnt)
-      .Input(new_xyz_batch_cnt)
-      .Output(idx)
-      .Attr("max_radius", max_radius)
-      .Attr("sample_num", nsample_i64)
-      .Run();
+  EXEC_NPU_CMD(aclnnStackBallQuery, xyz_transpose, new_xyz, xyz_batch_cnt, new_xyz_batch_cnt,idx,max_radius, nsample_i64);
 }
 
 void stack_ball_query_forward_impl(float max_radius, int nsample,
