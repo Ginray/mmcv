@@ -50,8 +50,9 @@ class BallQuery(Function):
         if xyz_batch_cnt is not None and center_xyz_batch_cnt is not None:
             assert xyz_batch_cnt.dtype == torch.int
             assert center_xyz_batch_cnt.dtype == torch.int
-            idx = center_xyz.new_zeros((center_xyz.shape[0], sample_num),
-                                       dtype=torch.int32)
+            # idx = center_xyz.new_zeros((center_xyz.shape[0], sample_num),
+            #                            dtype=torch.int32)
+            idx = torch.ones((center_xyz.shape[0], sample_num), dtype=torch.int32).npu()
             ext_module.stack_ball_query_forward(
                 center_xyz,
                 center_xyz_batch_cnt,
